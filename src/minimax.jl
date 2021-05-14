@@ -1,8 +1,4 @@
-scores = Dict(
-    "X" => 1,
-    "O" => -1,
-    "" => 0
-)
+using DelimitedFiles
 
 player_inv = Dict(
     "X" => "O",
@@ -130,9 +126,9 @@ function playgame_ai(nrow=3, ncol=3)
 
     for i in 1:nmaxturns
 
+        println("==========================")
         println("Turn number: $i")
-
-        display(board)
+        writedlm(stdout, board,  "\t|\t")
 
         player = whos_turn(board)
 
@@ -158,6 +154,9 @@ function playgame_ai(nrow=3, ncol=3)
         end
 
     end
+
+    println("==========================")
+    writedlm(stdout, board,  "\t|\t")
 
     return gameoutcome
 

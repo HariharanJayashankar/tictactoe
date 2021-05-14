@@ -141,9 +141,10 @@ function playgame(nrow = 3, ncol = 3)
     # start game
     for i in 1:nmaxturns
 
+        println("==========================")
         println("Turn number: $i")
+        writedlm(stdout, board,  "\t|\t")
         play_legal_move!(board)
-
         gameover = isgameover(board)
         println(gameover)
         if gameover
@@ -159,7 +160,9 @@ function playgame(nrow = 3, ncol = 3)
         end
   
     end
-
+    
+    println("==========================")
+    writedlm(stdout, board,  "\t|\t")
     return gameoutcome
 
 end
