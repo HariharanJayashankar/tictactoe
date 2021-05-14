@@ -3,6 +3,9 @@ uuid = "cccb49c6-41b3-49ca-94a8-dfe9cc459b83"
 authors = ["Hariharan Jayashankar"]
 version = "0.1.0"
 
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
 [compat]
 julia = "1"
 

@@ -1,4 +1,4 @@
-
+using LinearAlgebra
 
 function create_board(nrow = 3, ncol = 3)
     
@@ -36,6 +36,10 @@ function checkwinner(board)
 
     n, m = size(board)
     winner = ""
+
+    if sum(board .== "") == 0
+        winner = "Tie"
+    end
     
     # horizontal
     for i in 1:n
@@ -51,12 +55,13 @@ function checkwinner(board)
     end
     # diagonal
     straightdiag = board[diagind(board)]
-    if allsame(straightdiag)
+    if allsame(straightdiag) && straightdiag[1] != ""
         winner = straightdiag[1]
     end
-    revdiag = board[diagind(board[:, end:-1:1])]
-    if allsame(revdiag)
-        winner = straightdiag[1]
+    revboard = board[:, end:-1:1]
+    revdiag = revboard[diagind(revboard)]
+    if allsame(revdiag) && revdiag[1] != ""
+        winner = revdiag[1]
     end
 
     return winner
@@ -83,13 +88,49 @@ function parseinput(input)
     ==#
 
     inputs = split(input, ",")
-    inputs_array = [parse(Int, a) for a in inputs]
+    inputs_array = Tuple([parse(Int, a) for a in inputs])
 
     return inputs_array
 
 
 end
 
+function islegal(boardspot)
+
+    legal = boardspot == ""
+
+    return legal
+
+end
+
+function legal_moves(board)
+
+    legalmoves = Tuple.(findall(i->(i==""), board))
+
+    return legalmoves
+
+end
+
+function play_legal_move!(board)
+
+    movelegal = false
+    while movelegal == false
+
+        player = whos_turn(board)
+        println("Enter input:")
+        input = readline()
+        input = parseinput(input)
+
+        if input in legal_moves(board)
+            row, col = input
+            board[row, col] = player
+            movelegal = true
+        else
+            println("Made illegal move. Please try again")
+        end
+    end
+
+end
 
 function playgame(nrow = 3, ncol = 3)
 
@@ -101,16 +142,7 @@ function playgame(nrow = 3, ncol = 3)
     for i in 1:nmaxturns
 
         println("Turn number: $i")
-
-        display(board)
-
-        player = whos_turn(board)
-        println("Enter input:")
-        input = readline()
-        input = parseinput(input)
-
-        row, col = input
-        board[row, col] = player
+        play_legal_move!(board)
 
         gameover = isgameover(board)
         println(gameover)
